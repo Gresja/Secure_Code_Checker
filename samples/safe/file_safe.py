@@ -1,5 +1,9 @@
-# Safe example — file operations with context managers and error handling
+"""
+Sample: secure file I/O (reference implementation).
 
+Purpose: with open() and try/except; expected 0 issues.
+Contrasts with: samples/file_vulnerable.py
+"""
 def read_config(path):
     try:
         with open(path, "r", encoding="utf-8") as f:

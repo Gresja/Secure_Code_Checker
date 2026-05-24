@@ -1,5 +1,10 @@
-# Intentionally vulnerable — command injection examples
+"""
+Sample: command injection (for testing only).
 
+Purpose: Demonstrate COMMAND_INJECTION_RISK (os.system, shell=True).
+Expected: CRITICAL findings.
+Pair with: samples/safe/command_injection_safe.py (0 issues).
+"""
 import os
 import subprocess
 

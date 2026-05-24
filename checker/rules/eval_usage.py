@@ -1,3 +1,15 @@
+"""
+eval_usage.py — Dangerous eval() rule (EvalUsageChecker).
+
+Rule ID: EVAL_USAGE | Severity: CRITICAL
+
+Purpose:
+    Detect use of eval(), which can execute arbitrary Python from a string.
+
+What it does:
+    Flags any Call node where the function name is eval. Suggests ast.literal_eval
+    for safe parsing of literals only.
+"""
 import ast
 
 class EvalUsageChecker(ast.NodeVisitor):

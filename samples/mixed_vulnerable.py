@@ -1,5 +1,10 @@
-# Intentionally vulnerable — realistic script with multiple issue types
+"""
+Sample: combined vulnerabilities (for testing only).
 
+Purpose: Demo many rules in one script (SQL, secrets, hash, eval, command, files).
+Expected: High issue count and CRITICAL risk level.
+Pair with: samples/safe/mixed_safe.py (0 issues).
+"""
 import os
 import hashlib
 import sqlite3

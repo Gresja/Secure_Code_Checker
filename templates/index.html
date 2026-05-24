@@ -1,3 +1,14 @@
+<!--
+  templates/index.html — Web UI template for Secure Code Checker.
+
+  Purpose: Render the scan form and display results in the browser.
+
+  What it does:
+    - Paste Code / Upload File tabs and form POST to web_app.py
+    - Scan Code and Clear buttons; loading spinner on submit
+    - Risk summary, severity metrics, and per-issue cards with guidance
+  Used by: web_app.py (render_template("index.html", ...))
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>

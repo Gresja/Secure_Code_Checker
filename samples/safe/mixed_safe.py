@@ -1,5 +1,9 @@
-# Safe example — multiple secure patterns combined (should produce zero findings)
+"""
+Sample: combined secure patterns (reference implementation).
 
+Purpose: Multiple good practices in one file; expected 0 issues.
+Contrasts with: samples/mixed_vulnerable.py
+"""
 import json
 import os
 import secrets

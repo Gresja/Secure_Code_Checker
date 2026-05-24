@@ -1,5 +1,10 @@
-# Intentionally vulnerable — path traversal examples
+"""
+Sample: path traversal (for testing only).
 
+Purpose: Demonstrate PATH_TRAVERSAL and related unsafe paths.
+Expected: HIGH (and some UNSAFE_FILE_HANDLING) findings.
+Pair with: samples/safe/path_traversal_safe.py (0 issues).
+"""
 import os
 
 UPLOAD_DIR = "/var/app/uploads/"

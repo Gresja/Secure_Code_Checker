@@ -1,3 +1,15 @@
+"""
+path_traversal.py — Path traversal rule (PathTraversalChecker).
+
+Rule ID: PATH_TRAVERSAL | Severity: HIGH
+
+Purpose:
+    Detect file paths built from user-controlled input (directory escape attacks).
+
+What it does:
+    Pass 1: mark variables assigned from input() or request-like sources as tainted.
+    Pass 2: flag open(), os.*, os.path.join, and path concatenation using tainted data.
+"""
 import ast
 
 

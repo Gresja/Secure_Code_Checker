@@ -1,5 +1,9 @@
-# Safe example — JSON and yaml.safe_load only
+"""
+Sample: safe deserialization (reference implementation).
 
+Purpose: json.loads and yaml.safe_load only; expected 0 issues.
+Contrasts with: samples/deserialization_vulnerable.py
+"""
 import json
 import yaml
 

@@ -1,5 +1,10 @@
-# Intentionally vulnerable — typical insecure web application patterns
+"""
+Sample: insecure web-app style code (for testing only).
 
+Purpose: SQL injection, credentials, weak hash, eval in one file.
+Expected: Multiple rule types triggered.
+Pair with: samples/safe/mixed_safe.py or individual safe samples.
+"""
 import hashlib
 import sqlite3
 

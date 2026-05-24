@@ -1,3 +1,15 @@
+"""
+sql_injection.py — SQL injection rule (SQLInjectionChecker).
+
+Rule ID: SQL_INJECTION_RISK | Severity: HIGH
+
+Purpose:
+    Detect SQL queries built by embedding variables into query strings.
+
+What it does:
+    Visits BinOp (+), JoinedStr (f-strings), and Call (.format) nodes when SQL
+    keywords appear in string literals. Recommends parameterized queries.
+"""
 import ast
 
 class SQLInjectionChecker(ast.NodeVisitor):

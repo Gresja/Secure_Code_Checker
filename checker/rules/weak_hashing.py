@@ -1,3 +1,15 @@
+"""
+weak_hashing.py — Weak hashing rule (WeakHashingChecker).
+
+Rule ID: WEAK_HASHING_ALGORITHM | Severity: HIGH
+
+Purpose:
+    Detect MD5 and SHA1 usage via hashlib (collision-prone for security use).
+
+What it does:
+    Flags hashlib.md5(), hashlib.sha1(), and hashlib.new('md5'/'sha1').
+    Recommends SHA-256/SHA-3 or password-specific libraries (bcrypt, argon2).
+"""
 import ast
 
 class WeakHashingChecker(ast.NodeVisitor):

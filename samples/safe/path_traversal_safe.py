@@ -1,5 +1,9 @@
-# Safe example — validate paths stay inside allowed base directory
+"""
+Sample: safe path handling (reference implementation).
 
+Purpose: basename + resolve + base-dir check; expected 0 issues.
+Contrasts with: samples/path_traversal_vulnerable.py
+"""
 import os
 from pathlib import Path
 

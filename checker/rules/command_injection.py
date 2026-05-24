@@ -1,3 +1,15 @@
+"""
+command_injection.py — Command injection rule (CommandInjectionChecker).
+
+Rule ID: COMMAND_INJECTION_RISK | Severity: CRITICAL
+
+Purpose:
+    Detect shell command execution that can be hijacked with user-controlled input.
+
+What it does:
+    Flags os.system, os.popen, and subprocess calls with shell=True.
+    Safe pattern: subprocess.run([...], shell=False) with a fixed argument list.
+"""
 import ast
 
 

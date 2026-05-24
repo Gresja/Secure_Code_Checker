@@ -1,5 +1,10 @@
-# Intentionally vulnerable — insecure randomness for security-sensitive values
+"""
+Sample: insecure randomness (for testing only).
 
+Purpose: Demonstrate INSECURE_RANDOMNESS (random for tokens/sessions).
+Expected: HIGH findings.
+Pair with: samples/safe/randomness_safe.py (0 issues).
+"""
 import random
 
 # ── Vulnerable: random used to generate a session ID ─────────────────────────

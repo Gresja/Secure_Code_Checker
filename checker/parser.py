@@ -1,3 +1,16 @@
+"""
+parser.py — Code analysis orchestrator (CodeAnalyzer).
+
+Purpose:
+    Load Python source, build an AST, and run all security rule visitors.
+
+What it does:
+    - load_file(path): read a .py file from disk and parse it with ast.parse().
+    - load_source(code, name): parse pasted/uploaded code (used by the web app).
+    - add_issue(...): normalize each finding (rule, line, severity, code snippet).
+    - run_checks(): instantiate every rule in checker/rules/ and visit the AST.
+    - get_issues(): return the list of findings for Reporter or terminal output.
+"""
 import ast
 import logging
 from .rules import (

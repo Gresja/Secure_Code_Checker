@@ -1,4 +1,10 @@
-# Intentionally vulnerable - for testing only
+"""
+Sample: weak hashing (for testing only).
+
+Purpose: Demonstrate WEAK_HASHING_ALGORITHM (MD5, SHA1, hashlib.new).
+Expected: HIGH findings on lines using md5/sha1.
+Pair with: samples/safe/hashing_safe.py (0 issues).
+"""
 import hashlib
 
 def hash_password(password):

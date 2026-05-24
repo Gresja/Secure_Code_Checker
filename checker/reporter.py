@@ -1,3 +1,15 @@
+"""
+reporter.py — Report generation and issue enrichment (Reporter).
+
+Purpose:
+    Turn raw issue lists into structured reports for CLI, JSON, HTML, and web UI.
+
+What it does:
+    - build_report_data(): severity counts, weighted risk score, risk level, enriched issues.
+    - _get_dynamic_guidance(): per-issue "why this matters" and "recommended fix" from code context.
+    - save_json(): write reports/report.json.
+    - save_html(): write reports/report.html with styled finding cards.
+"""
 import json
 import os
 import re

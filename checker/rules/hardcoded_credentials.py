@@ -1,3 +1,15 @@
+"""
+hardcoded_credentials.py — Hardcoded secrets rule (HardcodedCredentialsChecker).
+
+Rule ID: HARDCODED_CREDENTIAL | Severity: CRITICAL
+
+Purpose:
+    Detect passwords, API keys, tokens, and similar secrets stored as string literals.
+
+What it does:
+    Flags Assign nodes to sensitive variable/attribute names and dict keys with
+    non-empty string values; may also flag secret-shaped values in dictionaries.
+"""
 import ast
 import re
 

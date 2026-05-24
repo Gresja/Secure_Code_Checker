@@ -1,3 +1,19 @@
+"""
+web_app.py — Flask web application entry point.
+
+Purpose:
+    Provide a browser UI to scan Python code without using the CLI.
+
+What it does:
+    - Serves a single-page form (templates/index.html) on port 5001.
+    - Accepts pasted source code or an uploaded .py file.
+    - Runs the same CodeAnalyzer and Reporter logic as the CLI.
+    - Renders scan results (risk score, findings, guidance) in the browser.
+
+Usage:
+    python web_app.py
+    Then open http://127.0.0.1:5001
+"""
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 

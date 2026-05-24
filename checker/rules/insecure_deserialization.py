@@ -1,3 +1,15 @@
+"""
+insecure_deserialization.py — Insecure deserialization rule (InsecureDeserializationChecker).
+
+Rule ID: INSECURE_DESERIALIZATION | Severity: CRITICAL (pickle) / HIGH (yaml)
+
+Purpose:
+    Detect deserialization that can execute code or instantiate arbitrary objects.
+
+What it does:
+    Flags pickle.loads/load/Unpickler and yaml.load without a safe Loader.
+    Ignores yaml.safe_load and Loader=SafeLoader.
+"""
 import ast
 
 

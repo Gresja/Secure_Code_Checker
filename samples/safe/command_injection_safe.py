@@ -1,5 +1,9 @@
-# Safe example — subprocess without shell; fixed argument lists
+"""
+Sample: safe subprocess usage (reference implementation).
 
+Purpose: Argument lists, no shell=True; expected 0 issues.
+Contrasts with: samples/command_injection_vulnerable.py
+"""
 import subprocess
 
 

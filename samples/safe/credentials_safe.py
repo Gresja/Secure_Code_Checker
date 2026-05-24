@@ -1,5 +1,9 @@
-# Safe example — secrets loaded from environment, not hardcoded
+"""
+Sample: secure credential handling (reference implementation).
 
+Purpose: Secrets from os.environ only; expected 0 issues.
+Contrasts with: samples/credentials_vulnerable.py
+"""
 import os
 
 

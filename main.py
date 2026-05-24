@@ -1,3 +1,18 @@
+"""
+main.py — Command-line interface (CLI) entry point.
+
+Purpose:
+    Run security scans on a single Python file from the terminal.
+
+What it does:
+    - Accepts a file path and optional flags (--verbose, --output).
+    - Uses CodeAnalyzer to parse the file and run all security rules.
+    - Prints colored findings and a severity summary to the terminal.
+    - Optionally saves JSON and/or HTML reports via Reporter.
+
+Usage:
+    python main.py <file.py> [--verbose] [--output json|html|both]
+"""
 import click
 from colorama import Fore, Style, init
 from checker.parser import CodeAnalyzer

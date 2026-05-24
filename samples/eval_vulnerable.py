@@ -1,5 +1,10 @@
-# Intentionally vulnerable - for testing only
+"""
+Sample: eval() and credentials (for testing only).
 
+Purpose: Demonstrate EVAL_USAGE and HARDCODED_CREDENTIAL.
+Expected: CRITICAL findings on eval and hardcoded secrets.
+Pair with: samples/safe/eval_safe.py (0 issues).
+"""
 def calculate(user_input):
     result = eval(user_input)       # dangerous!
     return result

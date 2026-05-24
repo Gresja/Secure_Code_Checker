@@ -1,5 +1,10 @@
-# Intentionally vulnerable — insecure configuration and secrets management
+"""
+Sample: secrets in config (for testing only).
 
+Purpose: Demonstrate HARDCODED_CREDENTIAL in variables, dicts, and class attrs.
+Expected: Multiple CRITICAL findings.
+Pair with: samples/safe/credentials_safe.py (0 issues).
+"""
 # ── Vulnerable: credentials hardcoded at module level ────────────────────────
 API_KEY        = "sk-proj-abc123xyz456def789"
 token          = "ghp_RealTokenExample1234567890abcdef"

@@ -1,5 +1,10 @@
-# Intentionally vulnerable — insecure deserialization examples
+"""
+Sample: insecure deserialization (for testing only).
 
+Purpose: Demonstrate INSECURE_DESERIALIZATION (pickle, yaml.load).
+Expected: CRITICAL/HIGH findings.
+Pair with: samples/safe/deserialization_safe.py (0 issues).
+"""
 import pickle
 import yaml
 

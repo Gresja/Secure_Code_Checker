@@ -1,5 +1,9 @@
-# Safe example — secrets module for tokens and security-sensitive values
+"""
+Sample: cryptographically secure randomness (reference implementation).
 
+Purpose: secrets module for tokens/IDs; expected 0 issues.
+Contrasts with: samples/randomness_vulnerable.py
+"""
 import secrets
 
 

@@ -1,3 +1,15 @@
+"""
+unsafe_file.py — Unsafe file handling rule (UnsafeFileHandlingChecker).
+
+Rule ID: UNSAFE_FILE_HANDLING | Severity: MEDIUM
+
+Purpose:
+    Detect open() calls that are not protected by a context manager or try/except.
+
+What it does:
+    Tracks visit_With and visit_Try scope; flags bare open() calls that may leak
+    file handles or leave partial writes on errors.
+"""
 import ast
 
 class UnsafeFileHandlingChecker(ast.NodeVisitor):

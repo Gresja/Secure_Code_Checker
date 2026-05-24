@@ -14,8 +14,9 @@ A static security analyzer for **Python** source code. It parses files with Pyth
 6. [Security rules](#security-rules)
 7. [Reports](#reports)
 8. [Project structure (every file)](#project-structure-every-file)
-9. [Sample files](#sample-files)
-10. [Limitations](#limitations)
+9. [Descriptions inside each file](#descriptions-inside-each-file)
+10. [Sample files](#sample-files)
+11. [Limitations](#limitations)
 
 ---
 
@@ -261,6 +262,21 @@ Secure alternatives; the scanner should report **0 issues** for these when run a
 | `samples/safe/randomness_safe.py` | `secrets` module for tokens and IDs. |
 | `samples/safe/path_traversal_safe.py` | `basename` + resolved path under a base directory. |
 | `samples/safe/mixed_safe.py` | Combined secure patterns (clean multi-rule demo). |
+
+---
+
+## Descriptions inside each file
+
+Every **source file** in this project now has a description at the top:
+
+| Location | Format |
+|----------|--------|
+| All `.py` files (`main.py`, `checker/`, `rules/`, `samples/`) | Python **module docstring** (`""" ... """`) at line 1 |
+| `templates/index.html` | HTML **comment block** before `<!DOCTYPE html>` |
+
+Open any file in your editor—the first block explains **what the file is**, **what it does**, and (for samples) **expected scan results** and **paired files**.
+
+For a single printable index of all files, see **`FILE_DESCRIPTIONS.md`** in this folder (same content as the tables below, plus rule IDs).
 
 ---
 

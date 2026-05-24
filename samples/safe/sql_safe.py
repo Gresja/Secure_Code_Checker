@@ -1,5 +1,9 @@
-# Safe example — parameterized SQL queries (no SQL injection)
+"""
+Sample: secure SQL (reference implementation).
 
+Purpose: Show correct use of parameterized queries; scanner should report 0 issues.
+Contrasts with: samples/sql_vulnerable.py
+"""
 import sqlite3
 
 

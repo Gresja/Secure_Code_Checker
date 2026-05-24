@@ -1,3 +1,15 @@
+"""
+insecure_randomness.py — Insecure randomness rule (InsecureRandomnessChecker).
+
+Rule ID: INSECURE_RANDOMNESS | Severity: HIGH
+
+Purpose:
+    Detect use of the random module for security-sensitive values (tokens, keys).
+
+What it does:
+    Flags random.randint, random.choice, random.getrandbits, etc.
+    Recommends secrets.token_hex(), secrets.token_urlsafe(), secrets.choice().
+"""
 import ast
 
 

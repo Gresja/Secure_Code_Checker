@@ -1,5 +1,10 @@
-# Intentionally vulnerable — unsafe file handling patterns
+"""
+Sample: multiple unsafe file operations (for testing only).
 
+Purpose: Demonstrate UNSAFE_FILE_HANDLING across read/write/append/binary.
+Expected: Several MEDIUM findings.
+Pair with: samples/safe/file_safe.py (0 issues).
+"""
 # ── Vulnerable: open() without context manager or try/except ─────────────────
 def read_config(path):
     f = open(path, "r")                  # file may never be closed on error

@@ -1,5 +1,9 @@
-# Safe example — strong hashing for integrity; bcrypt for passwords
+"""
+Sample: secure hashing (reference implementation).
 
+Purpose: bcrypt for passwords, SHA-256 for checksums; expected 0 issues.
+Contrasts with: samples/hashing_vulnerable.py
+"""
 import hashlib
 import bcrypt
 
