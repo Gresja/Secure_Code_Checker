@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Analysis Report</title>
+    <style>
+        :root {
+            --bg: #f3f6fb;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #475569;
+            --border: #dbe3ee;
+            --primary: #1d4ed8;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 32px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at top right, #e8efff, var(--bg));
+            line-height: 1.45;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .hero {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px 24px;
+            box-shadow: 0 10px 24px rgba(29, 78, 216, 0.08);
+            margin-bottom: 20px;
+        }
+        .hero h1 { margin: 0 0 8px 0; font-size: 1.6rem; color: #0b3aa4; }
+        .hero p { margin: 4px 0; color: var(--muted); }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .metric {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
+        }
+        .metric .value { font-size: 1.4rem; font-weight: 700; }
+        .metric .label { color: var(--muted); font-size: 0.86rem; text-transform: uppercase; letter-spacing: .03em; }
+        .risk-chip {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 6px 10px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .issues-title { margin: 18px 0 12px; font-size: 1.2rem; }
+        .issue-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 6px 12px rgba(15, 23, 42, 0.05);
+        }
+        .issue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .issue-title-wrap h3 { margin: 4px 0 0 0; font-size: 1rem; }
+        .issue-id {
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .severity-badge {
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 6px 10px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        .issue-meta { color: var(--muted); font-size: 0.9rem; margin: 8px 0 10px; }
+        .issue-description { margin: 0 0 12px; }
+        .issue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .issue-grid h4 { margin: 0 0 6px; font-size: 0.95rem; color: #0b3aa4; }
+        .issue-grid p { margin: 0; color: #1f2937; }
+        .code-block {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #f8fafc;
+            padding: 10px 12px;
+        }
+        .code-block span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+        }
+        .code-block code {
+            display: block;
+            color: #0f172a;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            word-break: break-word;
+        }
+        .no-issues {
+            background: #effdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .no-issues h3 { margin: 0 0 8px 0; color: #047857; }
+        .no-issues p { margin: 0; color: #065f46; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="hero">
+            <h1>Secure Coding Guidelines Report</h1>
+            <p><strong>File analyzed:</strong> samples/hashing_vulnerable.py</p>
+            <p><strong>Scan time:</strong> 2026-05-23 22:28:48</p>
+            <span class="risk-chip" style="background:#ea580c;">Overall Risk: HIGH (Score: 18)</span>
+        </section>
+
+        <section class="summary">
+            <div class="metric">
+                <div class="value">3</div>
+                <div class="label">Total Findings</div>
+            </div>
+            <div class="metric">
+                <div class="value" style="color:#dc2626;">0</div>
+                <div class="label">Critical</div>
+            </div>
+            <div class="metric">
+                <div class="value" style="color:#ea580c;">3</div>
+                <div class="label">High</div>
+            </div>
+            <div class="metric">
+                <div class="value" style="color:#ca8a04;">0</div>
+                <div class="label">Medium</div>
+            </div>
+            <div class="metric">
+                <div class="value" style="color:#16a34a;">0</div>
+                <div class="label">Low</div>
+            </div>
+        </section>
+
+        <h2 class="issues-title">Detailed Findings</h2>
+        
+            <article class="issue-card">
+                <div class="issue-header">
+                    <div class="issue-title-wrap">
+                        <div class="issue-id">Issue #01</div>
+                        <h3>WEAK_HASHING_ALGORITHM</h3>
+                    </div>
+                    <span class="severity-badge" style="background:#ea580c;">HIGH</span>
+                </div>
+                <p class="issue-meta"><strong>Line:</strong> 5 | <strong>File:</strong> samples/hashing_vulnerable.py</p>
+                <p class="issue-description">Weak hashing algorithm detected (MD5 or SHA1). These are vulnerable to collision attacks. Use SHA-256 or SHA-3 instead: hashlib.sha256().</p>
+                <div class="issue-grid">
+                    <div>
+                        <h4>Why this matters</h4>
+                        <p>MD5 is cryptographically weak and can be abused via collisions in integrity checks.</p>
+                    </div>
+                    <div>
+                        <h4>Recommended fix</h4>
+                        <p>For passwords, use `bcrypt` or `argon2` (not general-purpose hashes). For file/message integrity, prefer `hashlib.sha256`.</p>
+                    </div>
+                </div>
+                <div class="code-block">
+                    <span>Code context</span>
+                    <code>return hashlib.md5(password.encode()).hexdigest()    # weak!</code>
+                </div>
+            </article>
+            
+            <article class="issue-card">
+                <div class="issue-header">
+                    <div class="issue-title-wrap">
+                        <div class="issue-id">Issue #02</div>
+                        <h3>WEAK_HASHING_ALGORITHM</h3>
+                    </div>
+                    <span class="severity-badge" style="background:#ea580c;">HIGH</span>
+                </div>
+                <p class="issue-meta"><strong>Line:</strong> 8 | <strong>File:</strong> samples/hashing_vulnerable.py</p>
+                <p class="issue-description">Weak hashing algorithm detected (MD5 or SHA1). These are vulnerable to collision attacks. Use SHA-256 or SHA-3 instead: hashlib.sha256().</p>
+                <div class="issue-grid">
+                    <div>
+                        <h4>Why this matters</h4>
+                        <p>SHA1 is cryptographically weak and can be abused via collisions in integrity checks.</p>
+                    </div>
+                    <div>
+                        <h4>Recommended fix</h4>
+                        <p>Use stronger algorithms such as SHA-256/SHA-3, or password hashing libraries (bcrypt/argon2).</p>
+                    </div>
+                </div>
+                <div class="code-block">
+                    <span>Code context</span>
+                    <code>return hashlib.sha1(data).hexdigest()                # weak!</code>
+                </div>
+            </article>
+            
+            <article class="issue-card">
+                <div class="issue-header">
+                    <div class="issue-title-wrap">
+                        <div class="issue-id">Issue #03</div>
+                        <h3>WEAK_HASHING_ALGORITHM</h3>
+                    </div>
+                    <span class="severity-badge" style="background:#ea580c;">HIGH</span>
+                </div>
+                <p class="issue-meta"><strong>Line:</strong> 11 | <strong>File:</strong> samples/hashing_vulnerable.py</p>
+                <p class="issue-description">Weak hashing algorithm detected (MD5 or SHA1). These are vulnerable to collision attacks. Use SHA-256 or SHA-3 instead: hashlib.sha256().</p>
+                <div class="issue-grid">
+                    <div>
+                        <h4>Why this matters</h4>
+                        <p>MD5 is cryptographically weak and can be abused via collisions in integrity checks.</p>
+                    </div>
+                    <div>
+                        <h4>Recommended fix</h4>
+                        <p>Use stronger algorithms such as SHA-256/SHA-3, or password hashing libraries (bcrypt/argon2).</p>
+                    </div>
+                </div>
+                <div class="code-block">
+                    <span>Code context</span>
+                    <code>return hashlib.new(&#x27;md5&#x27;, data).hexdigest()          # also weak!</code>
+                </div>
+            </article>
+            
+    </div>
+</body>
+</html>

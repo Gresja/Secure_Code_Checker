@@ -1,0 +1,45 @@
+{
+  "file": "samples/hashing_vulnerable.py",
+  "timestamp": "2026-05-23 22:28:48",
+  "total_issues": 3,
+  "severity_summary": {
+    "CRITICAL": 0,
+    "HIGH": 3,
+    "MEDIUM": 0,
+    "LOW": 0
+  },
+  "risk_score": 18,
+  "risk_level": "HIGH",
+  "issues": [
+    {
+      "rule": "WEAK_HASHING_ALGORITHM",
+      "description": "Weak hashing algorithm detected (MD5 or SHA1). These are vulnerable to collision attacks. Use SHA-256 or SHA-3 instead: hashlib.sha256().",
+      "line": 5,
+      "severity": "HIGH",
+      "file": "samples/hashing_vulnerable.py",
+      "code": "return hashlib.md5(password.encode()).hexdigest()    # weak!",
+      "why_this_matters": "MD5 is cryptographically weak and can be abused via collisions in integrity checks.",
+      "recommended_fix": "For passwords, use `bcrypt` or `argon2` (not general-purpose hashes). For file/message integrity, prefer `hashlib.sha256`."
+    },
+    {
+      "rule": "WEAK_HASHING_ALGORITHM",
+      "description": "Weak hashing algorithm detected (MD5 or SHA1). These are vulnerable to collision attacks. Use SHA-256 or SHA-3 instead: hashlib.sha256().",
+      "line": 8,
+      "severity": "HIGH",
+      "file": "samples/hashing_vulnerable.py",
+      "code": "return hashlib.sha1(data).hexdigest()                # weak!",
+      "why_this_matters": "SHA1 is cryptographically weak and can be abused via collisions in integrity checks.",
+      "recommended_fix": "Use stronger algorithms such as SHA-256/SHA-3, or password hashing libraries (bcrypt/argon2)."
+    },
+    {
+      "rule": "WEAK_HASHING_ALGORITHM",
+      "description": "Weak hashing algorithm detected (MD5 or SHA1). These are vulnerable to collision attacks. Use SHA-256 or SHA-3 instead: hashlib.sha256().",
+      "line": 11,
+      "severity": "HIGH",
+      "file": "samples/hashing_vulnerable.py",
+      "code": "return hashlib.new('md5', data).hexdigest()          # also weak!",
+      "why_this_matters": "MD5 is cryptographically weak and can be abused via collisions in integrity checks.",
+      "recommended_fix": "Use stronger algorithms such as SHA-256/SHA-3, or password hashing libraries (bcrypt/argon2)."
+    }
+  ]
+}

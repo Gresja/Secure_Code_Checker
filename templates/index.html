@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Code Checker</title>
+    <style>
+        /* ── Reset & tokens ─────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:        #0d1117;
+            --surface:   #161b22;
+            --surface2:  #1c2330;
+            --border:    #30363d;
+            --text:      #e6edf3;
+            --muted:     #8b949e;
+            --accent:    #3fb950;
+            --accent-dim:#1a3d27;
+
+            --critical:  #f85149;
+            --high:      #fb8500;
+            --medium:    #e3b341;
+            --low:       #3fb950;
+            --none:      #8b949e;
+
+            --radius:    10px;
+            --shadow:    0 4px 24px rgba(0,0,0,.5);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* ── Navbar ──────────────────────────────────────── */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 28px;
+            height: 56px;
+            background: rgba(13,17,23,.92);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .navbar-logo .icon {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, #1a6b2e, #3fb950);
+            border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem;
+        }
+
+        .navbar-tag {
+            margin-left: auto;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--accent-dim);
+            color: var(--accent);
+            border: 1px solid #3fb95055;
+        }
+
+        /* ── Page layout ─────────────────────────────────── */
+        .page {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+
+        /* ── Hero ────────────────────────────────────────── */
+        .hero {
+            text-align: center;
+            padding: 48px 20px 36px;
+        }
+
+        .hero h1 {
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: -.02em;
+            background: linear-gradient(135deg, #e6edf3 30%, #3fb950);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 1.05rem;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* ── Card ────────────────────────────────────────── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        /* ── Form card ───────────────────────────────────── */
+        .form-card {
+            padding: 28px;
+            margin-bottom: 28px;
+        }
+
+        .form-card h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 20px;
+        }
+
+        /* ── Tabs ────────────────────────────────────────── */
+        .tab-bar {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 22px;
+        }
+
+        .tab {
+            padding: 10px 18px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: color .15s, border-color .15s;
+            user-select: none;
+        }
+
+        .tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── Drop zone ───────────────────────────────────── */
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color .15s, background .15s;
+            position: relative;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .drop-zone input[type="file"] {
+            position: absolute; inset: 0;
+            opacity: 0; cursor: pointer; width: 100%; height: 100%;
+        }
+
+        .drop-zone .dz-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .drop-zone .dz-text {
+            font-size: 0.95rem;
+            color: var(--muted);
+        }
+
+        .drop-zone .dz-text strong {
+            color: var(--accent);
+        }
+
+        .drop-zone .dz-hint {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        #file-chosen {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            min-height: 20px;
+        }
+
+        /* ── Textarea ────────────────────────────────────── */
+        textarea {
+            width: 100%;
+            min-height: 280px;
+            resize: vertical;
+            padding: 14px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            outline: none;
+            transition: border-color .15s;
+        }
+
+        textarea:focus { border-color: var(--accent); }
+        textarea::placeholder { color: #3d444d; }
+
+        /* ── Scan button ─────────────────────────────────── */
+        .scan-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 18px;
+            padding: 11px 24px;
+            background: linear-gradient(135deg, #1a6b2e, #3fb950);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(63,185,80,.3);
+            transition: opacity .15s, box-shadow .15s;
+        }
+
+        .scan-btn:hover {
+            opacity: .9;
+            box-shadow: 0 0 30px rgba(63,185,80,.5);
+        }
+
+        .scan-btn:active { opacity: .8; }
+
+        .clear-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 18px;
+            padding: 11px 20px;
+            background: transparent;
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: color .15s, border-color .15s, background .15s;
+        }
+
+        .clear-btn:hover {
+            color: var(--text);
+            border-color: #8b949e;
+            background: var(--surface2);
+        }
+
+        /* loading spinner */
+        .scan-btn .spinner {
+            display: none;
+            width: 15px; height: 15px;
+            border: 2px solid #ffffff55;
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .6s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Error banner ────────────────────────────────── */
+        .error-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border: 1px solid #f8514940;
+            border-radius: var(--radius);
+            background: #f8514912;
+            color: #ff7b72;
+            margin-bottom: 24px;
+        }
+
+        /* ── Divider ─────────────────────────────────────── */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ── Summary strip ───────────────────────────────── */
+        .summary-strip {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .metric {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 14px;
+            text-align: center;
+        }
+
+        .metric .val {
+            font-size: 1.7rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .metric .lbl {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: var(--muted);
+        }
+
+        /* ── Risk chip ───────────────────────────────────── */
+        .risk-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+        }
+
+        .risk-row .meta { color: var(--muted); font-size: 0.88rem; }
+        .risk-row .meta strong { color: var(--text); }
+
+        .risk-chip {
+            margin-left: auto;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        /* ── Issue cards ─────────────────────────────────── */
+        .issue-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,.3);
+        }
+
+        .issue-top {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+        }
+
+        .severity-bar {
+            width: 5px;
+            flex-shrink: 0;
+            border-radius: var(--radius) 0 0 0;
+        }
+
+        .issue-body {
+            padding: 14px 18px;
+            flex: 1;
+        }
+
+        .issue-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .issue-rule {
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        .severity-pill {
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .issue-meta {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .issue-desc {
+            font-size: 0.88rem;
+            color: #c9d1d9;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .info-box {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+
+        .info-box h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 6px;
+        }
+
+        .info-box p {
+            font-size: 0.85rem;
+            color: #c9d1d9;
+            line-height: 1.5;
+        }
+
+        .info-box.why h4 { color: #f85149; }
+        .info-box.fix h4 { color: #3fb950; }
+
+        .code-snippet {
+            background: #0d1117;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+
+        .code-snippet .snippet-label {
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .code-snippet code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.85rem;
+            color: #e3b341;
+            word-break: break-all;
+        }
+
+        /* ── Clean result ────────────────────────────────── */
+        .clean-result {
+            text-align: center;
+            padding: 48px 20px;
+            border: 1px solid #3fb95040;
+            border-radius: var(--radius);
+            background: #3fb95010;
+        }
+
+        .clean-result .check { font-size: 2.5rem; margin-bottom: 12px; }
+        .clean-result h3 { color: #3fb950; margin-bottom: 8px; }
+        .clean-result p { color: var(--muted); }
+
+        /* ── Responsive ──────────────────────────────────── */
+        @media (max-width: 680px) {
+            .summary-strip { grid-template-columns: repeat(3, 1fr); }
+            .info-grid { grid-template-columns: 1fr; }
+            .risk-row { flex-direction: column; align-items: flex-start; }
+            .risk-chip { margin-left: 0; }
+        }
+
+        @media (max-width: 420px) {
+            .summary-strip { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="navbar-logo" href="/">
+            <div class="icon">🔒</div>
+            Secure Code Checker
+        </a>
+        <span class="navbar-tag">Python · Static Analysis</span>
+    </nav>
+
+    <main class="page">
+
+        <!-- Hero -->
+        <header class="hero">
+            <h1>Find vulnerabilities<br>before attackers do</h1>
+            <p>Upload a Python file or paste code to instantly scan for security issues.</p>
+        </header>
+
+        <!-- Error -->
+        {% if error %}
+        <div class="error-banner">
+            <span>⚠</span>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Input card -->
+        <section class="card form-card">
+            <h2>Scan Target</h2>
+
+            <div class="tab-bar" id="tabs">
+                <div class="tab active" data-tab="paste">Paste Code</div>
+                <div class="tab" data-tab="upload">Upload File</div>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" id="scan-form">
+
+                <!-- Paste panel -->
+                <div class="tab-panel active" id="panel-paste">
+                    <textarea
+                        id="source_code"
+                        name="source_code"
+                        placeholder="# Paste your Python code here…&#10;password = 'admin123'"
+                        spellcheck="false">{{ submitted_code }}</textarea>
+                </div>
+
+                <!-- Upload panel -->
+                <div class="tab-panel" id="panel-upload">
+                    <div class="drop-zone" id="drop-zone">
+                        <input type="file" name="source_file" id="source_file" accept=".py">
+                        <span class="dz-icon">📂</span>
+                        <div class="dz-text">
+                            <strong>Click to browse</strong> or drag & drop a file here
+                        </div>
+                        <div class="dz-hint">Python files only (.py)</div>
+                    </div>
+                    <div id="file-chosen"></div>
+                </div>
+
+                <button type="submit" class="scan-btn" id="scan-btn">
+                    <span id="btn-text">Scan Code</span>
+                    <span class="spinner" id="spinner"></span>
+                    <span>→</span>
+                </button>
+                <button type="button" class="clear-btn" id="clear-btn">
+                    ✕ Clear
+                </button>
+
+            </form>
+        </section>
+
+        <!-- Results -->
+        {% if report %}
+
+        {% set colors = {
+            "CRITICAL": "#f85149",
+            "HIGH":     "#fb8500",
+            "MEDIUM":   "#e3b341",
+            "LOW":      "#3fb950",
+            "NONE":     "#8b949e"
+        } %}
+
+        <div class="section-title">Scan Results</div>
+
+        <!-- Risk row -->
+        <div class="risk-row">
+            <div class="meta">
+                <strong>{{ report.file }}</strong><br>
+                Scanned {{ report.timestamp }}
+            </div>
+            <span class="risk-chip" style="background: {{ colors.get(report.risk_level, '#8b949e') }};">
+                {{ report.risk_level }} RISK &nbsp;·&nbsp; Score {{ report.risk_score }}
+            </span>
+        </div>
+
+        <!-- Summary strip -->
+        <div class="summary-strip">
+            <div class="metric">
+                <div class="val">{{ report.total_issues }}</div>
+                <div class="lbl">Total</div>
+            </div>
+            <div class="metric">
+                <div class="val" style="color: var(--critical);">{{ report.severity_summary.CRITICAL }}</div>
+                <div class="lbl">Critical</div>
+            </div>
+            <div class="metric">
+                <div class="val" style="color: var(--high);">{{ report.severity_summary.HIGH }}</div>
+                <div class="lbl">High</div>
+            </div>
+            <div class="metric">
+                <div class="val" style="color: var(--medium);">{{ report.severity_summary.MEDIUM }}</div>
+                <div class="lbl">Medium</div>
+            </div>
+            <div class="metric">
+                <div class="val" style="color: var(--low);">{{ report.severity_summary.LOW }}</div>
+                <div class="lbl">Low</div>
+            </div>
+        </div>
+
+        <!-- Issue cards -->
+        {% if report.issues %}
+
+        <div class="section-title">Detailed Findings</div>
+
+        {% for issue in report.issues %}
+        <article class="issue-card">
+            <div class="issue-top">
+                <div class="severity-bar" style="background: {{ colors.get(issue.severity, '#8b949e') }};"></div>
+                <div class="issue-body">
+                    <div class="issue-head">
+                        <span class="issue-rule">{{ issue.rule }}</span>
+                        <span class="severity-pill" style="background: {{ colors.get(issue.severity, '#8b949e') }};">
+                            {{ issue.severity }}
+                        </span>
+                    </div>
+                    <div class="issue-meta">Line {{ issue.line }} &nbsp;·&nbsp; {{ issue.file }}</div>
+                    <p class="issue-desc">{{ issue.description }}</p>
+
+                    <div class="info-grid">
+                        <div class="info-box why">
+                            <h4>Why this matters</h4>
+                            <p>{{ issue.why_this_matters }}</p>
+                        </div>
+                        <div class="info-box fix">
+                            <h4>Recommended fix</h4>
+                            <p>{{ issue.recommended_fix }}</p>
+                        </div>
+                    </div>
+
+                    <div class="code-snippet">
+                        <span class="snippet-label">Code context — line {{ issue.line }}</span>
+                        <code>{{ issue.code or "(snippet unavailable)" }}</code>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+
+        {% else %}
+        <div class="clean-result">
+            <div class="check">✅</div>
+            <h3>No issues found</h3>
+            <p>The scanner did not detect any vulnerable patterns in this file.</p>
+        </div>
+        {% endif %}
+
+        {% endif %}
+
+    </main>
+
+    <script>
+        /* ── Tabs ─────────────────────────────── */
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        /* ── File input label ─────────────────── */
+        document.getElementById('source_file').addEventListener('change', function () {
+            const label = document.getElementById('file-chosen');
+            label.textContent = this.files[0] ? '📄 ' + this.files[0].name : '';
+        });
+
+        /* ── Drag-and-drop highlight ──────────── */
+        const dz = document.getElementById('drop-zone');
+        ['dragenter','dragover'].forEach(e => dz.addEventListener(e, () => dz.classList.add('dragover')));
+        ['dragleave','drop'].forEach(e => dz.addEventListener(e, () => dz.classList.remove('dragover')));
+
+        /* ── Spinner on submit ────────────────── */
+        document.getElementById('scan-form').addEventListener('submit', () => {
+            const btn  = document.getElementById('scan-btn');
+            const text = document.getElementById('btn-text');
+            const spin = document.getElementById('spinner');
+            text.textContent = 'Scanning…';
+            spin.style.display = 'block';
+            btn.disabled = true;
+        });
+
+        /* ── Clear button ─────────────────────── */
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            document.getElementById('source_code').value = '';
+            const fileInput = document.getElementById('source_file');
+            fileInput.value = '';
+            document.getElementById('file-chosen').textContent = '';
+        });
+    </script>
+
+</body>
+</html>
